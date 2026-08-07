@@ -40,39 +40,88 @@ class _CartPageState extends State<CartPage> {
 
           else
           Expanded(
-            child: ListView.builder(
-              itemCount: cart.itemCount,
-              itemBuilder: (context, index) {
-                final book = cart.cart[index];
+              child: ListView.builder(
+                itemCount: cart.itemCount,
+  itemBuilder: (context, index) {
+    final book = cart.cart[index];
 
-                return Card(
-                  margin: const EdgeInsets.symmetric(
-                    horizontal: 12,
-                    vertical: 6,
-                  ),
-                  child: ListTile(
-                    leading: Image.asset(book.image, width: 50, fit: BoxFit.cover, ),
-                    title: Text(book.name),
-                    subtitle: Text(book.author),
-                    trailing: Row(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        Text( "Kes${book.price}" ),
-                        IconButton(
-                          icon: const Icon( Icons.delete, color: Colors.red, ),
-                          onPressed: () {
-                            setState(() {
-                              context.read<CartService>().removeBook(book);
-                            });
-                          },
-                        ),
-                      ],
-                    ),
-                  )
-                );
-              }
-            )
-          ),
+    return Card(
+      margin: const EdgeInsets.symmetric(
+        horizontal: 12,
+        vertical: 6,
+      ),
+      child: ListTile(
+        leading: Image.asset(
+          book.book.image,
+          width: 50,
+          fit: BoxFit.cover,
+        ),
+        title: Text(book.book.name),
+        subtitle: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Text(book.book.author),
+            Text(
+              "Quantity: ${book.quantity}",
+              style: const TextStyle(
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+          ],
+        ),
+        trailing: Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+
+            IconButton(
+              icon: const Icon(Icons.remove_circle_outline),
+              onPressed: () {
+                context
+                    .read<CartService>().decreaseQuantity(book);
+              },
+            ),
+
+            Text(
+              "${book.quantity}",
+              style: const TextStyle(
+                fontSize: 16,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+
+            IconButton(
+              icon: const Icon(Icons.add_circle_outline),
+              onPressed: () {
+                context
+                    .read<CartService>().increaseQuantity(book);
+              },
+            ),
+
+            const SizedBox(width: 8),
+
+            Text(
+              "Kes ${book.subtotal.toStringAsFixed(2)}",
+            ),
+
+            IconButton(
+              icon: const Icon(
+                Icons.delete,
+                color: Colors.red,
+              ),
+              onPressed: () {
+                context
+                    .read<CartService>()
+                    .removeBook(book.book);
+              },
+            ),
+          ],
+        ),
+      ),
+    );
+  },
+              ),
+            ),
           Container(
             padding: const EdgeInsets.all(20),
             decoration: const BoxDecoration(

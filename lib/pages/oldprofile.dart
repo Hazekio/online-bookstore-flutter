@@ -1,118 +1,36 @@
 import 'package:flutter/material.dart';
-import '../services/auth_service.dart';
-import 'auth/login.dart';
+import '../widgets/app_bar.dart';
 
-class ProfilePage extends StatefulWidget {
+class ProfilePage extends StatelessWidget {
   const ProfilePage({super.key});
 
   @override
-  State<ProfilePage> createState() => _ProfileScreenState();
-}
-
-class _ProfileScreenState extends State<ProfilePage> {
-  final authService = AuthService.instance;
-
-  @override
   Widget build(BuildContext context) {
-    final user = authService.loggedInUser;
-
     return Scaffold(
-      appBar: AppBar(
-        title: const Text("Profile"),
-      ),
-      body: user == null ? buildGuestView() : buildUserView(user),
-    );
-  }
-
-  Widget buildGuestView() {
-    return Center(
-      child: Padding(
-        padding: const EdgeInsets.all(24),
+      appBar: const AppBarWidget(title: 'Profile'),
+      body: SingleChildScrollView(
+        padding: const EdgeInsets.all(16),
         child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            const Icon(
-              Icons.account_circle,
-              size: 100,
-              color: Colors.grey,
-            ),
-            const SizedBox(height: 20),
-            const Text(
-              "You're browsing as a guest",
-              style: TextStyle(
-                fontSize: 22,
-                fontWeight: FontWeight.bold,
-              ),
-              textAlign: TextAlign.center,
-            ),
-            const SizedBox(height: 10),
-            const Text(
-              "Sign in to access your orders, saved books and checkout faster.",
-              textAlign: TextAlign.center,
-            ),
-            const SizedBox(height: 30),
-            SizedBox(
-              width: double.infinity,
-              child: ElevatedButton(
-                onPressed: () async {
-                  await Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (_) => const LoginPage(),
-                    ),
-                  );
-                  setState(() {});
-                },
-                child: const Text("Login"),
-              ),
-            ),
+          children: const [
+            SizedBox(height: 10),
+            ProfileHeader(),
+            SizedBox(height: 16),
+            StatusBar(),
+            SizedBox(height: 20),
+            ReaderStatsRow(),
+            SizedBox(height: 20),
+            AboutMeCard(),
+            SizedBox(height: 20),
+            ProfileDetailsCard(),
+            SizedBox(height: 20),
           ],
         ),
       ),
     );
   }
-
-  Widget buildUserView(dynamic user) {
-    return SingleChildScrollView(
-      padding: const EdgeInsets.all(16),
-      child: Column(
-        children: [
-          const SizedBox(height: 10),
-          const ProfileHeader(),
-          const SizedBox(height: 16),
-          const StatusBar(),
-          const SizedBox(height: 20),
-          const ReaderStatsRow(),
-          const SizedBox(height: 20),
-          const AboutMeCard(),
-          const SizedBox(height: 20),
-          const ProfileDetailsCard(),
-          const SizedBox(height: 24),
-          
-          // --- LOGOUT BUTTON ---
-          ElevatedButton.icon(
-            icon: const Icon(Icons.logout),
-            label: const Text("Logout"),
-            style: ElevatedButton.styleFrom(
-              foregroundColor: Colors.red,
-            ),
-            onPressed: () {
-              authService.logout();
-              setState(() {});
-              ScaffoldMessenger.of(context).showSnackBar(
-                const SnackBar(
-                  content: Text("Logged out successfully"),
-                ),
-              );
-            },
-          ),
-          const SizedBox(height: 20),
-        ],
-      ),
-    );
-  }
 }
 
+// 1. Header with Avatar & Online/Reading Badge
 class ProfileHeader extends StatelessWidget {
   const ProfileHeader({super.key});
 
