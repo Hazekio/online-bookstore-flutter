@@ -31,4 +31,19 @@ class UserModel {
     address: "23 Kwarara Road"
   ),
  ];
+
+ factory UserModel.fromJson(Map<String, dynamic> json) {
+    return UserModel(
+      id: json["id"],
+      firstName: json["firstname"]?? "",
+      lastName: json["lastname"] ?? "",
+      email: json["email"] ?? "",
+      password: "",
+      phone: json["phone"] ?? "",
+      location: json["location"] ?? "",
+      address: json["address"] ?? "",
+    );
+  }
+
+  
 }

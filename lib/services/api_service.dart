@@ -26,7 +26,7 @@ class ApiService {
       },
     );
 
-    if (response.statusCode == 200) {
+    if (response.statusCode == 200) { //500 is a laravel code error, 422 is a database error, 404 is an endpoint error
       return jsonDecode(response.body);
     } else {
       throw Exception("Failed to load data");
