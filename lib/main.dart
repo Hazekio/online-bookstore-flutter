@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'widgets/bottom_nav.dart';
 import 'services/cart_service.dart';
+import 'services/auth_service.dart';
 
 void main() {
    runApp(
@@ -9,6 +10,9 @@ void main() {
     providers: [
       ChangeNotifierProvider(
         create: (_) => CartService(),
+      ),
+      ChangeNotifierProvider(
+        create: (_) => AuthService(),
       ),
     ],
     child: const MyApp()

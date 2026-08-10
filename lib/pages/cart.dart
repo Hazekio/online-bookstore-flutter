@@ -14,8 +14,6 @@ class CartPage extends StatefulWidget{
 }
 
 class _CartPageState extends State<CartPage> {
-  final authService = AuthService.instance;
-
   @override
   Widget build(BuildContext context) {
     final cart = context.watch<CartService>();
@@ -155,7 +153,7 @@ class _CartPageState extends State<CartPage> {
                     child: ElevatedButton(
                       onPressed:
                           cart.isEmpty ? null : () {
-                            if(!authService.isLoggedIn) {
+                            if(!context.watch<AuthService>().isLoggedIn) {
                               showDialog(
                                 context: context,
                                 builder: (_) => AlertDialog(

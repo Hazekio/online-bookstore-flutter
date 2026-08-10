@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import '../services/auth_service.dart';
 import 'auth/login.dart';
 
@@ -10,11 +11,10 @@ class ProfilePage extends StatefulWidget {
 }
 
 class _ProfileScreenState extends State<ProfilePage> {
-  final authService = AuthService.instance;
-
   @override
   Widget build(BuildContext context) {
-    final user = authService.loggedInUser;
+    final authService = context.read<AuthService>();
+    final user = authService.user;
 
     return Scaffold(
       appBar: AppBar(
@@ -97,7 +97,7 @@ class _ProfileScreenState extends State<ProfilePage> {
               foregroundColor: Colors.red,
             ),
             onPressed: () {
-              authService.logout();
+              context.read<AuthService>().logout();
               setState(() {});
               ScaffoldMessenger.of(context).showSnackBar(
                 const SnackBar(

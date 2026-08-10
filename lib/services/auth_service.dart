@@ -37,20 +37,6 @@ class AuthService extends ChangeNotifier{
     }
   }
 
-  UserModel? login( String email, String password){
-    try{
-      final user = allUsers.firstWhere(
-        (user) =>
-            user.email == email &&
-            user.password == password,
-      );
-      currentUser = user;
-      return user;
-
-    } catch (e) {
-      return null;
-    }
-  }
 
   void logout() {
     currentUser = null;

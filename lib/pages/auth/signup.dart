@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import '../../services/auth_service.dart';
-import 'login.dart';
+import '../../widgets/bottom_nav.dart';
 
 class SignupPage extends StatefulWidget{
   const SignupPage({super.key});
 
   @override
   State<SignupPage> createState() => _SignupPageState();
-
 }
 
 class _SignupPageState extends State<SignupPage> {
@@ -20,7 +20,6 @@ class _SignupPageState extends State<SignupPage> {
   final locationController = TextEditingController();
   final addressController = TextEditingController();
   final confirmPasswordController = TextEditingController();
-  final authService = AuthService.instance;
   bool isLoading = false;
 
   @override
@@ -38,25 +37,20 @@ class _SignupPageState extends State<SignupPage> {
   }
 
   void register() {
+    final authService = context.read<AuthService>();
     if (!formKey.currentState!.validate()) return;
-    setState(() {
-      isLoading = true;
-    });
+    final data = {
+      'firstName': firstNameController.text.trim(),
+      'lastName': firstNameController.text.trim(),
+      'email': emailController.text.trim(),
+      'phone': phoneController.text.trim(),
+      'location': locationController.text.trim(),
+      'address': addressController.text.trim(),
+      'password': passwordController.text.trim(),
+    };
 
-    Future.delayed(const Duration(milliseconds: 500), () {
-      final success = authService.register(
-        firstName: firstNameController.text.trim(),
-        lastName: firstNameController.text.trim(),
-        email: emailController.text.trim(),
-        phone: phoneController.text.trim(),
-        location: locationController.text.trim(),
-        address: addressController.text.trim(),
-        password: passwordController.text.trim(),
-      );
-
-      setState(() {
-        isLoading = false;
-      });
+    Future.delayed(const Duration(milliseconds: 500), () async{
+      final success = await authService.register(data);
 
       if (success) {
         ScaffoldMessenger.of(context).showSnackBar(
@@ -70,7 +64,7 @@ class _SignupPageState extends State<SignupPage> {
         Navigator.pushReplacement(
           context,
           MaterialPageRoute(
-            builder: (_) => const LoginPage(),
+            builder: (_) => const MainScreen(),
           ),
         );
       } else {

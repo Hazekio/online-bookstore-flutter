@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import '../../services/auth_service.dart';
 import 'signup.dart';
 
@@ -18,7 +19,6 @@ class LoginPage extends StatefulWidget{
     final emailController = TextEditingController();
     final passwordController = TextEditingController();
     final formKey = GlobalKey<FormState>();
-    final authService = AuthService.instance;
     bool isLoading = false;
 
     //useful in Flutter to clean up any resources no longer needed such as TextEditingController
@@ -30,22 +30,17 @@ class LoginPage extends StatefulWidget{
   }
 
   void login() {
+    final authService = context.read<AuthService>();
     if (!formKey.currentState!.validate()) return;
-    setState(() {
-      isLoading = true;
-    });
 
-    Future.delayed(const Duration(milliseconds: 500), () {
-      final user = authService.login(
+    Future.delayed(const Duration(milliseconds: 500), () async{
+      
+      final success = await authService.login(
         emailController.text.trim(),
         passwordController.text.trim(),
       );
 
-      setState(() {
-        isLoading = false;
-      });
-
-      if (user != null) {
+      if (success) {
         Navigator.pop(
           context
         );
